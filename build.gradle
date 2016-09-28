@@ -50,7 +50,7 @@ publishing {
     publications {
         MyPublication(MavenPublication) {
             groupId 'org.omegat'
-            artifactId 'jmyspell'
+            artifactId 'jmyspell-core'
             version version
 
             from components.java
@@ -69,11 +69,11 @@ bintray {
     key = System.getenv('BINTRAY_KEY')
     pkg {
         repo = 'maven'
-        name = 'jmyspell'
+        name = 'jmyspell-core'
         licenses = ['LGPL-2.1']
         userOrg = 'omegat-org'
-        websiteUrl = 'https://github.com/omegat-org/jmyspell'
-        vcsUrl = 'https://github.com/omegat-org/jmyspell.git'
+        websiteUrl = 'https://github.com/omegat-org/jmyspell-core'
+        vcsUrl = 'https://github.com/omegat-org/jmyspell-core.git'
         version {
             name = project.version
         }
