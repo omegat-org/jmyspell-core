@@ -31,6 +31,10 @@ java {
 javadoc {
     failOnError = false
 }
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs.addAll '-Xlint', '-Werror'
+}
 
 publishing {
     publications {
