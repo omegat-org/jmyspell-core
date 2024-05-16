@@ -140,7 +140,7 @@ public class AffixMgr
     for (int i = word.length() ; i >= 0; i--)
     {
       // NOTE : i begins at word.length() because "" is a valid suffix.
-      final String currSuffix = word.substring(i, word.length()) ;
+      final String currSuffix = word.substring(i) ;
       final List<SfxEntry> list = suffixesByData.get(currSuffix) ;
       
       if (null != list)
