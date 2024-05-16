@@ -31,8 +31,7 @@ public class OpenOfficeSpellDictionary implements SpellDictionary
 {
   private File personalDict ;
   private MySpell mySpell ;
-  private boolean isLoaded = false ;
-  private Future loader = null ;
+  private Future<Object> loader = null ;
   
   //Emilio Gustavo Ormeño
   public OpenOfficeSpellDictionary(InputStream affIS, InputStream dicIS) throws IOException

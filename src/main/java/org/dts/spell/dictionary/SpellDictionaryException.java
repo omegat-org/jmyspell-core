@@ -8,6 +8,7 @@ package org.dts.spell.dictionary;
  * @author DreamTangerine
  *
  */
+@SuppressWarnings("serial")
 public class SpellDictionaryException extends Exception
 {
 

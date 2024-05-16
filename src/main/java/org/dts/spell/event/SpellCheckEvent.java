@@ -13,6 +13,7 @@ import org.dts.spell.finder.WordFinder;
  * 
  * @author DreamTangerine (DreamTangerine@hotmail.com)
  */
+@SuppressWarnings("serial")
 public class SpellCheckEvent extends EventObject
 {
   private WordFinder finder ;  
