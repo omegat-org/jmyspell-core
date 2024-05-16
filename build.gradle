@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     testImplementation(libs.junit4)
+    testImplementation(libs.assertj)
 }
 
 java {
