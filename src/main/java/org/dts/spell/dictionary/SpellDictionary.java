@@ -24,7 +24,7 @@ public interface SpellDictionary
    *          a word to add.
    *  
    */
-  public void addWord(String word) throws SpellDictionaryException ;
+  void addWord(String word) throws SpellDictionaryException ;
 
   /**
    * Returns true if the word is correctly spelled against the dictionary.
@@ -32,21 +32,21 @@ public interface SpellDictionary
    * @param word
    *          a word to check.
    */
-  public boolean isCorrect(String word) ;
+  boolean isCorrect(String word) ;
 
-  /**
-   * Returns a list of String that are the suggestions to any word. If the word
-   * is correctly spelled, then this method could return just that one word, or
-   * it could still return a list of words with similar spellings.
-   * 
-   * @param word
-   *          the word that we want to get a list of spelling suggestions for.
-   * 
-   * @return List a List of suggested words. It can't be null. An empty list must be return no suggestions.
-   */
-  public List<String> getSuggestions(String word) ;
-  
-  /**
+    /**
+     * Returns a list of String that are the suggestions to any word. If the word
+     * is correctly spelled, then this method could return just that one word, or
+     * it could still return a list of words with similar spellings.
+     *
+     * @param word the word that we want to get a list of spelling suggestions for.
+     * @return List a List of suggested words. It can't be null. An empty list must be return no suggestions.
+     */
+    default List<String> getSuggestions(String word) {
+        return null;
+    }
+
+    /**
    * Returns a list of String that are the suggestions to any word. If the word
    * is correctly spelled, then this method could return just that one word, or
    * it could still return a list of words with similar spellings.
@@ -59,5 +59,5 @@ public interface SpellDictionary
    * 
    * @return List a List of suggested words. It can't be null. An empty list must be return no suggestions.
    */
-  public List<String> getSuggestions(String word, int nMax) ;  
+    List<String> getSuggestions(String word, int nMax) ;
 }

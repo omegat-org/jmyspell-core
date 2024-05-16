@@ -13,11 +13,11 @@ import org.dts.spell.tokenizer.WordTokenizer;
  */
 public interface Filter
 {
-  public Word filter(Word word, WordTokenizer tokenizer) ;
+  Word filter(Word word, WordTokenizer tokenizer) ;
   
-  public void updateCharSequence(
-      WordTokenizer tokenizer, 
-      int start, 
-      int end, 
-      int cause) ;
+  void updateCharSequence(
+          WordTokenizer tokenizer,
+          int start,
+          int end,
+          int cause) ;
 }
