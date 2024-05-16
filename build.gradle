@@ -1,82 +1,105 @@
+import com.github.spotbugs.snom.Confidence
+
 plugins {
-  id 'com.jfrog.bintray' version '1.6'
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+    alias libs.plugins.spotbugs
+    alias libs.plugins.nexus.publish
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
-
-version = '1.0.0-beta-2'
+version = '1.0.0-SNAPSHOT'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    testImplementation(libs.junit4)
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+        vendor = JvmVendorSpec.ADOPTIUM
     }
-    test {
-        java {
-            srcDir 'src/test/java'
-        }
-    }
-}
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
+    withSourcesJar()
+    withJavadocJar()
 }
 
 javadoc {
     failOnError = false
 }
 
-task javadocJar(type: Jar) {
-    from javadoc.outputs
-}
-
 publishing {
     publications {
-        MyPublication(MavenPublication) {
+        mavenJava(MavenPublication) {
             groupId 'org.omegat'
             artifactId 'jmyspell-core'
-            version version
-
             from components.java
-            artifact sourceJar {
-                classifier 'sources'
-            }
-            artifact javadocJar {
-                classifier 'javadoc'
+            pom {
+                name.set("jmyspell-core")
+                description.set("JMySpell is a spell-checker for Java applications, capable \n" +
+                        "of seamlessly incorporating the existing OpenOffice.org \n" +
+                        "dictionaries. Based on MySpell (but written in 100% Java.)\n")
+                url.set("https://github.com/omegat-org/jmyspell-core")
+                licenses {
+                    license {
+                        name.set("GNU Lesser Public License v2.1")
+                        url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/omegat-org/jmyspell-core.git")
+                    developerConnection.set("scm:git:git://github.com/omegat-org/jmyspell-core.git")
+                }
+                developers {
+                    developer {
+                        id.set("miurahr")
+                        name.set("Hiroshi Miura")
+                        email.set("miurahr@linux.com")
+                    }
+                }
             }
         }
     }
 }
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    pkg {
-        repo = 'maven'
-        name = 'jmyspell-core'
-        licenses = ['LGPL-2.1']
-        userOrg = 'omegat-org'
-        websiteUrl = 'https://github.com/omegat-org/jmyspell-core'
-        vcsUrl = 'https://github.com/omegat-org/jmyspell-core.git'
-        version {
-            name = project.version
+signing {
+    if (project.hasProperty("signingKey")) {
+        def signingKey = findProperty("signingKey").toString()
+        def signingPassword = findProperty("signingPassword").toString()
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    } else {
+        useGpgCmd()
+    }
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(Sign).configureEach {
+    def hasKey = project.hasProperty("signingKey") || project.hasProperty("signing.gnupg.keyName")
+    onlyIf { hasKey && !project.version.toString().endsWith("-SNAPSHOT")}
+}
+
+nexusPublishing.repositories {
+    sonatype {
+        username = project.hasProperty('sonatypeUsername') ? project.property('sonatypeUsername') : System.getenv('SONATYPE_USER')
+        password = project.hasProperty('sonatypePassword') ? project.property('sonatypePassword') : System.getenv('SONATYPE_PASS')
+    }
+}
+
+spotbugs {
+    reportLevel = Confidence.valueOf('HIGH')
+
+    //  excludeFilter = project.file("config/spotbugs/exclude.xml")
+    tasks.spotbugsMain {
+        reports.create("html") {
+            required.set(true)
         }
     }
-    publications = ['MyPublication']
+    tasks.spotbugsTest {
+        reports.create("html") {
+            required.set(true)
+        }
+    }
 }
