@@ -1,5 +1,7 @@
 package org.dts.spell.finder ;
 
+import java.util.Objects;
+
 /**
  * A Word, that represent a Word in the WordFinder. Based in Jazzy
  * work. This object can only be mutate by moveTo function.
@@ -138,17 +140,22 @@ public class Word implements CharSequence
       
     return false ;
   }
-  
+
+  @Override
   public boolean equals(Object o)
   {
-    if (null != o && o instanceof Word)
+    if (o instanceof Word)
     {
       Word ow = (Word) o ;
-      
       return ow.getStart() == getStart() && ow.getText().equals(getText()) ;
     }
-    
     return false ;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return Objects.hash(getStart(), getText());
   }
 
   public boolean equalText(Word word)
