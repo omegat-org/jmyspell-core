@@ -22,7 +22,6 @@ import java.util.zip.ZipFile;
 
 import org.dts.spell.dictionary.myspell.MySpell;
 import org.dts.spell.dictionary.myspell.Utils;
-import org.dts.spell.finder.Word;
 
 /**
  * @author DreamTangerine

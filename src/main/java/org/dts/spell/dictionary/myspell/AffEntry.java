@@ -5,7 +5,6 @@
 package org.dts.spell.dictionary.myspell;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 

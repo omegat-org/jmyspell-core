@@ -7,14 +7,8 @@
 
 package org.dts.spell;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import org.dts.spell.dictionary.SpellDictionary;
 import org.dts.spell.event.SpellCheckEvent;
 import org.dts.spell.finder.Word;
