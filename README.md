@@ -7,6 +7,8 @@ This repository is a forked jmyspell-core project used for OmegaT project.
 - Use UTF-8 for the code
 - Use LF for line terminator character
 - Migrate to a Gradle build system
+- Migrate to Java 11
+- Add `module-info.java`
 - Fix several obvious bad coding styles
   - constant ErrorInfo.MAX_SUGGESTIONS to be final
   - constant Utils.XPRODUCT to be final
