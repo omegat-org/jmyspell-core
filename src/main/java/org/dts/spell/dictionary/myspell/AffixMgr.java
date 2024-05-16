@@ -393,7 +393,7 @@ public class AffixMgr
   {
     line = line.trim() ;
     
-    return line.length() == 0 || line.startsWith("#") ;
+    return line.isEmpty() || line.startsWith("#") ;
   }
   
   public static String readEncoding(InputStream affStream) throws IOException
@@ -482,7 +482,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
@@ -524,7 +524,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
@@ -580,7 +580,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
@@ -615,7 +615,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
@@ -659,7 +659,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
@@ -749,7 +749,7 @@ public class AffixMgr
     {
       piece = tp.nextToken() ;
       
-      if (piece.length() != 0)
+      if (!piece.isEmpty())
       {
         switch (i)
         {
