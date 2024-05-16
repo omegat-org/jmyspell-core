@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.text.Collator;
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -26,7 +24,7 @@ public final class Utils
   
   ///////////////////////////////////////////////////
   
-  public static int XPRODUCT = (1 << 0) ;
+  public static final int XPRODUCT = 0x0001;
   
   public static boolean TestAff(String a, char b , int c)
   {
