@@ -2,6 +2,7 @@ import com.github.spotbugs.snom.Confidence
 
 plugins {
     id 'java'
+    id 'jacoco'
     id 'maven-publish'
     id 'signing'
     alias libs.plugins.spotbugs
@@ -112,5 +113,13 @@ spotless {
     enforceCheck false
     java {
         removeUnusedImports()
+    }
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    group = 'verification'
+    reports {
+        html.required = true
     }
 }
