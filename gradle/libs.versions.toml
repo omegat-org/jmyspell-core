@@ -6,4 +6,5 @@ junit4 = {group = "junit", name = "junit", version.ref = "junit"}
 
 [plugins]
 spotbugs = {id = "com.github.spotbugs", version = "6.0.14"}
+spotless = {id = "com.diffplug.spotless", version = "6.25.0"}
 nexus-publish = {id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0"}

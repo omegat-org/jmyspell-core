@@ -5,6 +5,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     alias libs.plugins.spotbugs
+    alias libs.plugins.spotless
     alias libs.plugins.nexus.publish
 }
 
@@ -90,16 +91,21 @@ nexusPublishing.repositories {
 
 spotbugs {
     reportLevel = Confidence.valueOf('HIGH')
-
-    //  excludeFilter = project.file("config/spotbugs/exclude.xml")
     tasks.spotbugsMain {
-        reports.create("html") {
-            required.set(true)
+        reports {
+            html.required = true
         }
     }
     tasks.spotbugsTest {
-        reports.create("html") {
-            required.set(true)
+        reports {
+            html.required = true
         }
+    }
+}
+
+spotless {
+    enforceCheck false
+    java {
+        removeUnusedImports()
     }
 }
