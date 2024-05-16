@@ -65,10 +65,14 @@ public class MySpell
         dStream = zipFile.getInputStream(entry) ;
     }
       
-    initFromStreams(affStream, dStream) ;    
-    
-    affStream.close() ;
-    dStream.close() ;
+    initFromStreams(affStream, dStream) ;
+
+      if (affStream != null) {
+          affStream.close() ;
+      }
+      if (dStream != null) {
+          dStream.close() ;
+      }
   }
 
   public MySpell(InputStream zipStream) throws IOException

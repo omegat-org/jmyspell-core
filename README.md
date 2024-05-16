@@ -15,6 +15,7 @@ This repository is a forked jmyspell-core project used for OmegaT project.
   - use `isEmpty()` for condition that compare with zero length
   - fix: define `Word#hashCode`, `Word` class already has `equals` definition
   - fix: unwanted raw types
+  - fix: check nullity of stream before close
 - style: apply spotbugs
 - Quality assurance by checking with SpotBugs static code analysis
 - CI: test with GitHub Actions
