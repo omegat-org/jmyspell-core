@@ -5,7 +5,10 @@
 package org.dts.spell.filter;
 
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.dts.spell.finder.Word;
 import org.dts.spell.tokenizer.WordTokenizer;
@@ -16,7 +19,7 @@ import org.dts.spell.tokenizer.WordTokenizer;
  */
 public class DumpFilter implements Filter
 {
-  private PrintWriter writer ;
+  private final PrintWriter writer ;
   
   /**
    * 
@@ -28,7 +31,12 @@ public class DumpFilter implements Filter
 
   public DumpFilter(OutputStream stream)
   {
-    writer = new PrintWriter(stream) ;
+    writer = new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8), true);
+  }
+
+  public DumpFilter(OutputStream stream, String encoding)
+  {
+    writer = new PrintWriter(new OutputStreamWriter(stream, Charset.forName(encoding)), true);
   }
   
   /* (non-Javadoc)
