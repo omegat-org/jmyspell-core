@@ -25,9 +25,8 @@ import org.dts.spell.finder.Word;
  */
 public class ErrorInfo
 {
-  public static int MAX_SUGGESSTIONS = 4 ;
-  private static String[] EMPTY_SUGGESTIONS = new String[0] ;
-  
+  public static final int MAX_SUGGESSTIONS = 4 ;
+
   private class SuggestionsLoader
   {
     public SuggestionsLoader(SpellCheckEvent event)
@@ -70,7 +69,7 @@ public class ErrorInfo
       return result ;
     }
     
-    private SpellDictionary dictionary ;
+    private final SpellDictionary dictionary ;
   }
   
   // Lazy load of suggestions
