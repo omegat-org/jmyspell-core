@@ -44,12 +44,12 @@ public final class AffixEncoder
     buffer.order(ByteOrder.LITTLE_ENDIAN) ;
   }
   
-  final int getSetSize()
+  int getSetSize()
   {
     return (int) (encoder.maxBytesPerChar() * 256.0) ;
   }
   
-  final int getCharIndex(char c)
+  int getCharIndex(char c)
   {
     int result ;
     
