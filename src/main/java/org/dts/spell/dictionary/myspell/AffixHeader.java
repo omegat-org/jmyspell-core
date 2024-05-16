@@ -1,6 +1,6 @@
 package org.dts.spell.dictionary.myspell;
 
-class AffixHeader
+public class AffixHeader
 {
   public char achar ;
   public char type ;
