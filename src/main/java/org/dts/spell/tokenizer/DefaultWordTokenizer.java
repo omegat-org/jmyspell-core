@@ -14,9 +14,9 @@ import org.dts.spell.finder.Word ;
  */
 public class DefaultWordTokenizer extends AbstractWordTokenizer
 {
-  private BreakIterator wordIterator ;
+  private final BreakIterator wordIterator ;
 
-  private CharIteratorAdapter wordSequence = new CharIteratorAdapter() ;
+  private final CharIteratorAdapter wordSequence = new CharIteratorAdapter() ;
 
   public DefaultWordTokenizer()
   {
@@ -38,7 +38,7 @@ public class DefaultWordTokenizer extends AbstractWordTokenizer
 
     String text = sequence.subSequence(start, end).toString().trim() ;
     
-    if (!text.equals(""))
+    if (!text.isEmpty())
       return new Word(text, start, isStartOfSentence(sequence, start)) ;
     else
       return null ;
@@ -54,7 +54,7 @@ public class DefaultWordTokenizer extends AbstractWordTokenizer
     
     String text = sequence.subSequence(start, end).toString().trim() ;
     
-    if (!text.equals(""))
+    if (!text.isEmpty())
       return new Word(text, start, isStartOfSentence(sequence, start)) ;
     else
       return null ;
@@ -95,12 +95,12 @@ public class DefaultWordTokenizer extends AbstractWordTokenizer
     wordIterator.setText(wordSequence) ;
   }
 
-  private void onInsertChars(int start, int end)
+  private void onInsertChars()
   {
     onChangeSequence() ;
   }
 
-  private void onDeleteChars(int start, int end)
+  private void onDeleteChars()
   {
     onChangeSequence() ;
   }
@@ -114,11 +114,11 @@ public class DefaultWordTokenizer extends AbstractWordTokenizer
         break ;
 
       case INSERT_CHARS:
-        onInsertChars(start, end) ;
+        onInsertChars() ;
         break ;
 
       case DELETE_CHARS:
-        onDeleteChars(start, end) ;
+        onDeleteChars() ;
         break ;
     }
   }
