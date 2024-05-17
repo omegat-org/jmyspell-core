@@ -1,10 +1,14 @@
 [versions]
 junit = "4.13.2"
 assertj = "3.25.0"
+commons_io = "2.16.1"
+commons_compress = "1.20"
 
 [libraries]
 junit4 = {group = "junit", name = "junit", version.ref = "junit"}
 assertj = {group = "org.assertj", name = "assertj-core", version.ref = "assertj"}
+commons-io = {group = "commons-io", name = "commons-io", version.ref = "commons_io"}
+commons-compress = {group = "org.apache.commons", name = "commons-compress", version.ref = "commons_compress"}
 
 [plugins]
 spotbugs = {id = "com.github.spotbugs", version = "6.0.14"}

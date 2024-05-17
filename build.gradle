@@ -19,6 +19,8 @@ repositories {
 dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
+    testImplementation(libs.commons.io)
+    testImplementation(libs.commons.compress)
 }
 
 java {
