@@ -5,7 +5,6 @@
 package org.dts.spell.dictionary.myspell;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,19 +33,19 @@ import org.dts.spell.dictionary.myspell.wordmaps.WordMap;
 public class AffixMgr
 {
   /** Map of prefixes by prefix text. */
-  private Map<String, List<PfxEntry>> prefixesByData = new TreeMap<String, List<PfxEntry>>();
+  private final Map<String, List<PfxEntry>> prefixesByData = new TreeMap<>();
   
   /** Map of suffixes by suffix text. */
-  private Map<String, List<SfxEntry>> suffixesByData = new TreeMap<String, List<SfxEntry>>();
+  private final Map<String, List<SfxEntry>> suffixesByData = new TreeMap<>();
   
   /** Map of prefixes by prefix name. */
-  private Map<Character, List<PfxEntry>> prefixesByName = new TreeMap<Character, List<PfxEntry>>();
+  private final Map<Character, List<PfxEntry>> prefixesByName = new TreeMap<>();
   
   /** Map of suffixes by suffix name. */
-  private Map<Character, List<SfxEntry>> suffixesByName = new TreeMap<Character, List<SfxEntry>>();
+  private final Map<Character, List<SfxEntry>> suffixesByName = new TreeMap<>();
   
   /** List of words. */
-  private WordMap pHMgr ;
+  private final WordMap pHMgr ;
   
   private String trystring = null ;
   private String compound  = null ;
@@ -67,7 +66,6 @@ public class AffixMgr
    *            encoding
    * @param ptr
    *            words list
-   * @throws IOException
    */
   public AffixMgr(InputStream affStream, String encoding, WordMap ptr) throws IOException
   {
@@ -86,14 +84,13 @@ public class AffixMgr
    */
   public HEntry affix_check(String word)
   {
-    HEntry rv = null ;
-    
     // check all prefixes (also crossed with suffixes if allowed)
-    rv = prefix_check(word) ;
+    HEntry rv = prefix_check(word) ;
     
-    // if still not found check all suffixes
-    if (null == rv)
-      rv = suffix_check(word, 0, null) ;
+    // if still not found, check all suffixes
+    if (null == rv) {
+        rv = suffix_check(word, 0, null) ;
+    }
     
     return rv ;
   }
@@ -234,9 +231,7 @@ public class AffixMgr
   
   public List<GuessWord> expand_rootword(String ts, String ap)
   {
-    int al = ap.length() ;
-    
-    List<GuessWord> wlst = new LinkedList<GuessWord>() ;
+    List<GuessWord> wlst = new LinkedList<>() ;
     
     // first add root word to list
     wlst.add(new GuessWord(ts, false)) ;
@@ -258,7 +253,7 @@ public class AffixMgr
     int len = word.length() ;
     
     int i ;
-    HEntry rv = null ;
+    HEntry rv;
     String st ;
     String wordI ;
     
@@ -276,7 +271,7 @@ public class AffixMgr
       
       if ((rv != null) && Utils.TestAff(rv.astr, compound_flag, rv.astr.length()))
       {
-        wordI = word.substring(i, word.length()) ;
+        wordI = word.substring(i) ;
         rv = lookup(wordI) ;
         
         if ((rv != null) && Utils.TestAff(rv.astr, compound_flag, rv.astr.length()))
@@ -330,7 +325,8 @@ public class AffixMgr
   {
     return maptable ;
   }
-  
+
+  @SuppressWarnings("unused")
   public String get_encoding()
   {
     if (encoding == null)
@@ -376,22 +372,18 @@ public class AffixMgr
   {
     line = line.trim() ;
     
-    return line.isEmpty() || line.startsWith("#") ;
+    return line.isEmpty() || line.startsWith("#");
   }
   
   public static String readEncoding(InputStream affStream) throws IOException
   {
     // we suppose that to the first line with is no a comment is in US-ASCII
-    try {
-      String line = readLine(affStream);
+    String line = readLine(affStream);
 
-      while (null != line && canSkip(line))
-        line = readLine(affStream);
+    while (null != line && (canSkip(line) || !line.startsWith("SET")))
+      line = readLine(affStream);
 
-      return parseEncoding(line) ;
-    } catch (Exception e) {
-      throw e;
-    }
+    return parseEncoding(line) ;
   }
   
   
@@ -457,8 +449,9 @@ public class AffixMgr
   
   private void parse_try(String line) throws IOException
   {
-    if (trystring != null)
-      Utils.throwIOException("ERROR_DUPLICATE_TRY") ;
+    if (trystring != null) {
+        throw new IOException(Utils.getString("ERROR_DUPLICATE_TRY"));
+    }
     
     StringTokenizer tp = new StringTokenizer(line, " ") ;
     String piece ;
@@ -490,73 +483,71 @@ public class AffixMgr
       }
     }
     
-    if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_TRY") ;
+    if (np != 2) {
+        throw new IOException(Utils.getString("ERROR_MISSING_TRY"));
+    }
   }
   
-  private static final Pattern ENCODING_MICROSOFT = Pattern.compile("microsoft-cp(\\d+)"); 
-  
-  private static String parseEncoding(String line) throws IOException
-  {
-    if (line == null)
-      Utils.throwIOException("ERROR_MISSING_SET") ;
-    
-    StringTokenizer tp = new StringTokenizer(line, " ") ;
-    String piece ;
-    int i = 0 ;
-    int np = 0 ;
-    String result = null ;
-    
-    while (tp.hasMoreTokens())
-    {
-      piece = tp.nextToken() ;
-      
-      if (!piece.isEmpty())
-      {
-        switch (i)
-        {
+  private static final Pattern ENCODING_MICROSOFT = Pattern.compile("microsoft-cp(\\d+)");
+
+  private static String parseEncoding(String line) throws IOException {
+    if (line == null) {
+      throw new IOException(Utils.getString("ERROR_MISSING_SET"));
+    }
+    StringTokenizer tp = new StringTokenizer(line, " ");
+    String piece;
+    int i = 0;
+    int np = 0;
+    String result = null;
+
+    while (tp.hasMoreTokens()) {
+      piece = tp.nextToken();
+
+      if (!piece.isEmpty()) {
+        switch (i) {
           case 0:
-            np++ ;
-            break ;
-            
+            np++;
+            break;
+
           case 1:
-            result = piece ;
-            np++ ;
-            break ;
-            
+            result = piece;
+            np++;
+            break;
+
           default:
-            break ;
+            break;
         }
-        
-        i++ ;
+
+        i++;
       }
     }
-    
-    if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_SET") ;
-    
-    result = result.trim() ;
-    
-    Matcher m = ENCODING_MICROSOFT.matcher(result) ;
 
-    if (m.matches())
-        result = "windows-" + m.group(1) ;
-    
-    return result;    
+    if (np != 2) {
+        throw new IOException(Utils.getString("ERROR_MISSING_SET"));
+    }
+
+    if (result != null) {
+      result = result.trim();
+      Matcher m = ENCODING_MICROSOFT.matcher(result);
+      if (m.matches()) {
+        result = "windows-" + m.group(1);
+      }
+    }
+    return result;
   }
   
   private void parse_set(String line) throws IOException
   {
-    if (encoding != null)
-      Utils.throwIOException("ERROR_DUPLICATE_SET") ;
-    
+    if (encoding != null) {
+        throw new IOException(Utils.getString("ERROR_DUPLICATE_SET"));
+    }
     encoding = parseEncoding(line) ;
   }
   
   private void parse_cpdflag(String line) throws IOException
   {
     if (compound != null)
-      Utils.throwIOException("ERROR_DUPLICATE_COMPOUND_FLAGS") ;
+      throw new IOException(Utils.getString("ERROR_DUPLICATE_COMPOUND_FLAGS"));
     
     StringTokenizer tp = new StringTokenizer(line, " ") ;
     String piece ;
@@ -588,7 +579,7 @@ public class AffixMgr
       }
     }
     if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_COMPOUND_FLAG") ;
+      throw new IOException(Utils.getString("ERROR_MISSING_COMPOUND_FLAG"));
   }
   
   private void parse_cpdmin(String line) throws IOException
@@ -624,7 +615,7 @@ public class AffixMgr
     }
     
     if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_COMPOUND_MIN") ;
+      throw new IOException(Utils.getString("ERROR_MISSING_COMPOUND_MIN"));
     
     if ((cpdmin < 1) || (cpdmin > 50))
       cpdmin = 3 ;
@@ -635,7 +626,7 @@ public class AffixMgr
     int numrep = get_numrep() ;
     
     if (numrep != 0)
-      Utils.throwIOException("ERROR_DUPLICATE_REP") ;
+      throw new IOException(Utils.getString("ERROR_DUPLICATE_REP"));
     
     StringTokenizer tp = new StringTokenizer(line, " ") ;
     String piece ;
@@ -658,7 +649,7 @@ public class AffixMgr
             numrep = Integer.parseInt(piece) ;
             
             if (numrep < 1)
-              Utils.throwIOException("INCORRECT_NUMBER_OF_ENTRIES_REP_TABLE") ;
+              throw new IOException(Utils.getString("INCORRECT_NUMBER_OF_ENTRIES_REP_TABLE"));
             
             reptable = new ReplEntry[numrep] ;
             np++ ;
@@ -673,7 +664,7 @@ public class AffixMgr
     }
     
     if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_REP_TABLE") ;
+      throw new IOException(Utils.getString("ERROR_MISSING_REP_TABLE"));
     
     /* now parse the numrep lines to read in the remainder of the table */
     for (int j = 0 ; j < numrep ; j++)
@@ -689,13 +680,13 @@ public class AffixMgr
       {
         piece = tp.nextToken() ;
         
-        if (piece.length() != 0)
+        if (!piece.isEmpty())
         {
           switch (i)
           {
             case 0:
               if (!piece.startsWith("REP"))
-                Utils.throwIOException("ERROR_REP_TABLE_CORRUPT") ;
+                throw new IOException(Utils.getString("ERROR_REP_TABLE_CORRUPT"));
               break ;
               
             case 1:
@@ -715,7 +706,7 @@ public class AffixMgr
       }
       
       if ((reptable[j].pattern == null) || (reptable[j].replacement == null))
-        Utils.throwIOException("ERROR_REP_TABLE_CORRUPT") ;
+        throw new IOException(Utils.getString("ERROR_REP_TABLE_CORRUPT"));
     }
     
   }
@@ -725,7 +716,7 @@ public class AffixMgr
     int nummap = get_nummap() ;
     
     if (nummap != 0)
-      Utils.throwIOException("ERROR_DUPLICATE_MAP") ;
+      throw new IOException(Utils.getString("ERROR_DUPLICATE_MAP"));
     
     StringTokenizer tp = new StringTokenizer(line, " ") ;
     String piece ;
@@ -748,7 +739,7 @@ public class AffixMgr
             nummap = Integer.parseInt(piece) ;
             
             if (nummap < 1)
-              Utils.throwIOException("ERROR_NUMBER_ENTRIES_MAP") ;
+              throw new IOException(Utils.getString("ERROR_NUMBER_ENTRIES_MAP"));
             
             maptable = new MapEntry[nummap] ;
             np++ ;
@@ -763,7 +754,7 @@ public class AffixMgr
     }
     
     if (np != 2)
-      Utils.throwIOException("ERROR_MISSING_MAP") ;
+      throw new IOException(Utils.getString("ERROR_MISSING_MAP"));
     
     /* now parse the nummap lines to read in the remainder of the table */
     for (int j = 0 ; j < nummap ; j++)
@@ -779,13 +770,13 @@ public class AffixMgr
       {
         piece = tp.nextToken() ;
         
-        if (piece.length() != 0)
+        if (!piece.isEmpty())
         {
           switch (i)
           {
             case 0:
               if (!piece.startsWith("MAP"))
-                Utils.throwIOException("ERROR_MAP_CORRUPT") ;
+                throw new IOException(Utils.getString("ERROR_MAP_CORRUPT"));
               
               break ;
               
@@ -801,8 +792,8 @@ public class AffixMgr
         }
       }
       
-      if ((maptable[j].set == null) || (maptable[j].set.length() == 0))
-        Utils.throwIOException("ERROR_MAP_CORRUPT") ;
+      if ((maptable[j].set == null) || (maptable[j].set.isEmpty()))
+        throw new IOException(Utils.getString("ERROR_MAP_CORRUPT"));
     }
   }
   
@@ -856,47 +847,13 @@ public class AffixMgr
   
   void build_pfxlist(PfxEntry pfxptr)
   {
-    List<PfxEntry> list = prefixesByData.get(pfxptr.appnd);
-    
-    if (null == list)
-    {
-      list = new ArrayList<PfxEntry>();
-      prefixesByData.put(pfxptr.appnd, list);
-    }
-    
-    list.add(pfxptr);
-
-    list = prefixesByName.get(pfxptr.achar);
-    
-    if (null == list)
-    {
-      list = new ArrayList<PfxEntry>();
-      prefixesByName.put(pfxptr.achar, list);
-    }
-    
-    list.add(pfxptr) ;
+    prefixesByData.computeIfAbsent(pfxptr.appnd, k -> new ArrayList<>()).add(pfxptr);
+    prefixesByName.computeIfAbsent(pfxptr.achar, k -> new ArrayList<>()).add(pfxptr) ;
   }
   
   void build_sfxlist(SfxEntry sfxptr)
   {
-    List<SfxEntry> list = suffixesByData.get(sfxptr.appnd);
-    
-    if (null == list)
-    {
-      list = new ArrayList<SfxEntry>();
-      suffixesByData.put(sfxptr.appnd, list);
-    }
-    
-    list.add(sfxptr);
-
-    list = suffixesByName.get(sfxptr.achar);
-    
-    if (null == list)
-    {
-      list = new ArrayList<SfxEntry>();
-      suffixesByName.put(sfxptr.achar, list);
-    }
-    
-    list.add(sfxptr);
+    suffixesByData.computeIfAbsent(sfxptr.appnd, k -> new ArrayList<>()).add(sfxptr);
+    suffixesByName.computeIfAbsent(sfxptr.achar, k -> new ArrayList<>()).add(sfxptr);
   }
 }
