@@ -23,7 +23,7 @@ public class SpanishTest extends TestBase {
     }
 
     @Test
-    public void testSpell() throws IOException {
+    public void testSpanishSpell() throws IOException {
         try (InputStream affFile = Files.newInputStream(tempDir.resolve("es/index.aff"));
              InputStream dicFile = Files.newInputStream(tempDir.resolve("es/index.dic"))) {
             SpellDictionary dict = new OpenOfficeSpellDictionary(affFile, dicFile);
@@ -40,7 +40,7 @@ public class SpanishTest extends TestBase {
     }
 
     @Test
-    public void testOpenOfficeDictionaryZipDictionary() throws IOException {
+    public void testSpanishOpenOfficeDictionaryZipDictionary() throws IOException {
         try (InputStream is = getClass().getResourceAsStream(DICTIONARY_ZIP)) {
             SpellDictionary dict = new OpenOfficeSpellDictionary(is, personalDictionary, false);
             SpellChecker checker = new SpellChecker(dict);
