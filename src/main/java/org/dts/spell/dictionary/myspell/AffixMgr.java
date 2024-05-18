@@ -353,24 +353,7 @@ public class AffixMgr
   {
     return nosplitsugs;
   }
-  
-  public static String readEncoding(String affpath) throws IOException
-  {
-    FileInputStream rd = null ;
-    
-    try
-    {
-      // we suppose that first line is in US-ASCII
-      rd = new FileInputStream(affpath) ;
-      
-      return readEncoding(rd) ;
-    }
-    finally
-    {
-      Utils.close(rd) ;
-    }
-  }
-  
+
   private static String readLine(InputStream affStream) throws IOException
   {
     StringBuilder builder = new StringBuilder(20) ;
@@ -399,12 +382,16 @@ public class AffixMgr
   public static String readEncoding(InputStream affStream) throws IOException
   {
     // we suppose that to the first line with is no a comment is in US-ASCII
-    String line = readLine(affStream) ;
-    
-    while (null != line && canSkip(line))
-      line = readLine(affStream) ;
-    
-    return parseEncoding(line) ;
+    try {
+      String line = readLine(affStream);
+
+      while (null != line && canSkip(line))
+        line = readLine(affStream);
+
+      return parseEncoding(line) ;
+    } catch (Exception e) {
+      throw e;
+    }
   }
   
   
