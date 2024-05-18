@@ -44,6 +44,23 @@ public class OpenOfficeSpellDictonaryTest extends TestBase {
     }
 
     @Test
+    public void testCheckOpenOfficeDictionaryBackground() throws IOException {
+        try (InputStream affFile = Files.newInputStream(tempDir.resolve("en_US.aff"));
+             InputStream dicFile = Files.newInputStream(tempDir.resolve("en_US.dic"))) {
+            SpellDictionary dict = new OpenOfficeSpellDictionary(affFile, dicFile, personalDictionary, true);
+            SpellChecker checker = new SpellChecker(dict);
+            checker.setCaseSensitive(false);
+
+            String word = "Hello world!";
+            assertThat(checker.isCorrect(word)).isTrue();
+            List<String> suggestions = dict.getSuggestions(word);
+            assertThat(suggestions.size()).isEqualTo(10);
+            assertThat(suggestions).contains("Worldliness's", "Worldlinesses", "Worldliness", "Worldliest", "Afterworlds",
+                    "Afterworld's", "Afterworld", "Worldwide", "Dreamworlds");
+        }
+    }
+
+    @Test
     public void testOpenOfficeDictionaryZipDictionaryStream() throws IOException {
         try (InputStream is = getClass().getResourceAsStream(DICTIONARY_ZIP)) {
             SpellDictionary dict = new OpenOfficeSpellDictionary(is, personalDictionary, false);
@@ -80,13 +97,24 @@ public class OpenOfficeSpellDictonaryTest extends TestBase {
     }
 
     @Test
-    public void testOpenOfficeDictionaryStreamBackground() throws IOException {
+    public void testOpenOfficeDictionaryZipStreamBackground() throws IOException {
         try (InputStream is = getClass().getResourceAsStream(DICTIONARY_ZIP)) {
             SpellDictionary dict = new OpenOfficeSpellDictionary(is, personalDictionary, true);
             SpellChecker checker = new SpellChecker(dict);
             checker.setCaseSensitive(false);
             String word = "Hello world!";
             assertThat(checker.isCorrect(word)).isTrue();
+        }
+    }
+
+    @Test
+    public void testOpenOfficeDictionaryCompoundRule() throws IOException {
+        try (InputStream is = getClass().getResourceAsStream(DICTIONARY_ZIP)) {
+            SpellDictionary dict = new OpenOfficeSpellDictionary(is, personalDictionary, true);
+            SpellChecker checker = new SpellChecker(dict);
+            checker.setCaseSensitive(false);
+            String word = "1st, 2nd, 121st";
+            assertThat(checker.isCorrect(word)).isFalse();
         }
     }
 
